@@ -1,22 +1,19 @@
-/***** ShiftOut.cpp *****/
+/***** ShiftRegister.cpp *****/
 
-#include <ShiftOut.h>
+#include "ShiftRegister.h"
 
 ShiftRegister::ShiftRegister(){};
 
-ShiftRegister::ShiftRegister(BelaContext* context, unsigned int dataPin, unsigned int clockPin, unsigned int latchPin, unsigned int maxSize){
-	setup (context, dataPin, clockPin, latchPin, maxSize);
+ShiftRegister::ShiftRegister(unsigned int dataPin, unsigned int clockPin, unsigned int latchPin, unsigned int maxSize){
+	setup (dataPin, clockPin, latchPin, maxSize);
 };
 
-bool ShiftRegister::setup(BelaContext* context, unsigned int dataPin, unsigned int clockPin, unsigned int latchPin, unsigned int maxSize)
+bool ShiftRegister::setup(unsigned int dataPin, unsigned int clockPin, unsigned int latchPin, unsigned int maxSize)
 {
 	mData_Pin = dataPin;
 	mClock_Pin = clockPin;
 	mLatch_Pin = latchPin;
 	data.resize(maxSize);
-	pinMode(context, 0, mData_Pin,OUTPUT);
-    pinMode(context, 0, mClock_Pin,OUTPUT);
-	pinMode(context, 0, mLatch_Pin,OUTPUT);
 	return true;
 }
 
@@ -25,16 +22,23 @@ bool ShiftRegister::dataSent()
 	return gState == kIdle;
 }
 
-void ShiftRegister::render(BelaContext* context, int number_of_bits)
+void ShiftRegister::render(BelaContext* context)
 {
 	for(unsigned int n = 0; n < context->digitalFrames; ++n)
 	{
-		render(context, n, number_of_bits);
+		render(context, n);
 	}
 }
 
-void ShiftRegister::render(BelaContext* context, unsigned int n, int number_of_bits)
+void ShiftRegister::render(BelaContext* context, unsigned int n)
 {
+	if(!pinModeSet)
+	{
+		pinMode(context, 0, mData_Pin,OUTPUT);
+		pinMode(context, 0, mClock_Pin,OUTPUT);
+		pinMode(context, 0, mLatch_Pin,OUTPUT);
+		pinModeSet = true;
+	}
 	bool latchValue = 0;
 	bool dataValue = 0;
 	bool clockValue = 0;
@@ -56,7 +60,7 @@ void ShiftRegister::render(BelaContext* context, unsigned int n, int number_of_b
 			clockValue = 1;
 		}
 		gCurrentDataFrame++;
-		if(gCurrentDataFrame == 2 * number_of_bits)
+		if(gCurrentDataFrame == 2 * currentLength)
 		{
 			gState = kStop;
 		}
@@ -75,7 +79,8 @@ void ShiftRegister::render(BelaContext* context, unsigned int n, int number_of_b
 void ShiftRegister::sendData(bool* dataBuffer, unsigned int length, unsigned int startingFrame)
 {
 	// should we check for length and expand `data` if needed? That wouldn't be RT-safe
-	for(unsigned int n = 0; n < std::min(length, data.size()); ++n)
+	currentLength = std::min(length, data.size());
+	for(unsigned int n = 0; n < currentLength; ++n)
 	{
 		data[n] = dataBuffer[n];
 	}
