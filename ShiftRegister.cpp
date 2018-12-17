@@ -76,7 +76,7 @@ void ShiftRegister::render(BelaContext* context, unsigned int n)
 	digitalWriteOnce(context, n, mClock_Pin, clockValue);
 }
 
-void ShiftRegister::sendData(bool* dataBuffer, unsigned int length, unsigned int startingFrame)
+void ShiftRegister::sendData(bool* dataBuffer, unsigned int length)
 {
 	// should we check for length and expand `data` if needed? That wouldn't be RT-safe
 	currentLength = std::min(length, data.size());

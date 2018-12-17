@@ -31,6 +31,6 @@ class ShiftRegister
 		bool dataSent();
 		void render(BelaContext* context);
 		void render(BelaContext* context, unsigned int n);
-		void sendData(bool* dataBuffer, unsigned int length, unsigned int startingFrame);
+		void sendData(bool* dataBuffer, unsigned int length);
 
 };

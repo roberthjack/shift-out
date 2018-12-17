@@ -38,7 +38,7 @@ void render(BelaContext *context, void *userData)
 	// Push reading to register at the first frame of the next available block
 	// initialise in setup with the mLatch/mData/mClock pins
 	// if(shiftRegister.dataSent())
-	// 	shiftRegister.sendData(data, number_of_bits, 0);
+	// 	shiftRegister.sendData(data, number_of_bits);
 	// shiftRegister.render(context, number_of_bits);
 	
 	// Push reading to register at the first frame possible
@@ -46,7 +46,7 @@ void render(BelaContext *context, void *userData)
 	{
 		shiftRegister.render(context, n, number_of_bits);
 		if(shiftRegister.dataSent())
-			shiftRegister.sendData(data, number_of_bits, n);
+			shiftRegister.sendData(data, number_of_bits);
 	}
 
 	

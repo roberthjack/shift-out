@@ -199,7 +199,7 @@ void Bela_listhook(const char *source, int argc, t_atom *argv){
 			return;
 		}
 		gShiftRegisterDataPending = true;
-		gShiftRegister.sendData(data, argc, 0);
+		gShiftRegister.sendData(data, argc);
 	}
 }
 // SHIFT REGISTER end
