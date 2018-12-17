@@ -225,9 +225,9 @@ void Bela_messageHook(const char *source, const char *symbol, int argc, t_atom *
 				arguments[n] = libpd_get_float(&argv[n]);
 			}
 			gShiftRegister.setup(
-					arguments[0],
-					arguments[1],
-					arguments[2],
+					arguments[0] - gLibpdDigitalChannelOffset,
+					arguments[1] - gLibpdDigitalChannelOffset,
+					arguments[2] - gLibpdDigitalChannelOffset,
 					arguments[3]
 				);
 		}
