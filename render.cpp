@@ -12,10 +12,10 @@ bool data[number_of_bits] = {1,0,1,0,1,0,1,0};
 
 //Pin DS of 74HC595
 int mData_Pin = 3;
-//Pin ST_CP of 74HC595
-int mLatch_Pin = 4;
 //Pin SH_CP of 74HC595
-int mClock_Pin = 5;
+int mClock_Pin = 4;
+//Pin ST_CP of 74HC595
+int mLatch_Pin = 5;
 
 // For cycling through the LEDs
 int gCounter = 0;
